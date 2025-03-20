@@ -1,0 +1,41 @@
+{
+    "name": "Emergency Response App",
+    "short_name": "EmergencyApp",
+    "description": "Disaster response application with online and offline capabilities",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#e74c3c",
+    "icons": [
+      {
+        "src": "images/logo236.ico",
+        "sizes": "256x256",
+        "type": "image/ico",
+        "purpose": "any maskable"
+      },
+      {
+        "src": "images/logo512.ico",
+        "sizes": "512x512",
+        "type": "image/ico",
+        "purpose": "any maskable"
+      }
+    ],
+    "orientation": "portrait",
+    "categories": ["emergency", "utilities"],
+    "shortcuts": [
+      {
+        "name": "Emergency Shelters",
+        "short_name": "Shelters",
+        "description": "View nearby emergency shelters",
+        "url": "/?view=shelters",
+        "icons": [{ "src": "images/shelters.png", "sizes": "96x96" }]
+      },
+      {
+        "name": "Evacuation Routes",
+        "short_name": "Routes",
+        "description": "View evacuation routes",
+        "url": "/?view=routes",
+        "icons": [{ "src": "images/routes.png", "sizes": "96x96" }]
+      }
+    ]
+  }

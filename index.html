@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#e74c3c">
+  <meta name="description" content="Emergency response application with online and offline capabilities">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <title>Emergency Response App</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="images/logo236.ico">
+  <link rel="icon" type="image/x-icon" href="images/logo236.ico">
+</head>
+<body>
+  <header>
+    <h1>Emergency Response</h1>
+    <div id="connection-status" class="status-initializing">Initializing app...</div>
+  </header>
+  
+  <main id="app-container" class="mode-initializing">
+    <div id="message" class="message"></div>
+    
+    <section id="emergency-info-container">
+      <h2>Emergency Information</h2>
+      <div id="emergency-info">
+        <div class="loading-indicator">Loading emergency information...</div>
+      </div>
+    </section>
+    
+    <div id="phone-input-container">
+      <h3>Provide Your Phone Number for SMS Updates</h3>
+      <p>Enter your phone number to receive critical emergency information via SMS:</p>
+      <div class="form-group">
+        <input type="tel" id="phone-number" placeholder="Phone Number (e.g., +1234567890)" pattern="[+]?[0-9]{10,15}">
+        <button id="phone-submit">Submit</button>
+      </div>
+    </div>
+    
+    <section id="offline-instructions" class="hidden">
+      <h2>You're Offline</h2>
+      <p>This app has limited functionality when offline:</p>
+      <ul>
+        <li>Cached emergency information is still available</li>
+        <li>SMS updates can be requested if you've provided your phone number</li>
+        <li>Some features will be restored when you're back online</li>
+      </ul>
+    </section>
+  </main>
+  
+  <footer>
+    <p>Disaster Response PWA - Powered by CAMARA APIs</p>
+  </footer>
+  <script src="mock-api.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('ServiceWorker registration successful');
+          })
+          .catch(err => {
+            console.log('ServiceWorker registration failed: ', err);
+          });
+      });
+    }
+
+    // Check if the app is installed or can be installed
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      // Save the event to trigger later
+      const installPrompt = e;
+      
+      // Show the install button
+      const installButton = document.createElement('button');
+      installButton.textContent = 'Install App';
+      installButton.className = 'install-button';
+      installButton.addEventListener('click', () => {
+        // Show the install prompt
+        installPrompt.prompt();
+        
+        // Wait for the user to respond to the prompt
+        installPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('User accepted the install prompt');
+          } else {
+            console.log('User dismissed the install prompt');
+          }
+        });
+      });
+      
+      // Add button to header
+      document.querySelector('header').appendChild(installButton);
+    });
+  </script>
+</body>
+</html>

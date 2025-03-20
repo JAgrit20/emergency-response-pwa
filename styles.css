@@ -1,0 +1,264 @@
+/* Base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  
+  body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+  }
+  
+  header {
+    background-color: #e74c3c;
+    color: white;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  header h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+  
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  footer {
+    background-color: #333;
+    color: #f5f5f5;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 2rem;
+    font-size: 0.8rem;
+  }
+  
+  /* Status indicators */
+  #connection-status {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  #connection-status::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+  
+  .status-initializing {
+    background-color: #f39c12;
+    color: white;
+  }
+  
+  .status-initializing::before {
+    background-color: #ffd700;
+    animation: pulse 1s infinite;
+  }
+  
+  .status-checking {
+    background-color: #3498db;
+    color: white;
+  }
+  
+  .status-checking::before {
+    background-color: #fff;
+    animation: pulse 1s infinite;
+  }
+  
+  .status-online {
+    background-color: #2ecc71;
+    color: white;
+  }
+  
+  .status-online::before {
+    background-color: #fff;
+  }
+  
+  .status-offline {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .status-offline::before {
+    background-color: #fff;
+  }
+  
+  @keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 1; }
+  }
+  
+  /* Emergency info sections */
+  .info-section {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .info-section h2 {
+    margin-bottom: 0.5rem;
+    color: #e74c3c;
+    font-size: 1.2rem;
+  }
+  
+  .info-section ul {
+    list-style: none;
+  }
+  
+  .info-section li {
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .info-section li:last-child {
+    border-bottom: none;
+  }
+  
+  /* Phone input container */
+  #phone-input-container {
+    background-color: white;
+    border-radius: 8px;
+    padding: 1rem;
+    margin: 1rem 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: none;
+  }
+  
+  #phone-input-container.visible {
+    display: block;
+  }
+  
+  .form-group {
+    display: flex;
+    margin-top: 0.5rem;
+  }
+  
+  input[type="tel"] {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px 0 0 4px;
+    font-size: 1rem;
+  }
+  
+  button {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0 4px 4px 0;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  
+  button:hover {
+    background-color: #c0392b;
+  }
+  
+  /* Message notifications */
+  .message {
+    position: fixed;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #2ecc71;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: top 0.3s ease-in-out;
+    z-index: 1000;
+    max-width: 90%;
+    text-align: center;
+  }
+  
+  .message.visible {
+    top: 80px;
+  }
+  
+  .message.error {
+    background-color: #e74c3c;
+  }
+  
+  /* Mode-specific styling */
+  .mode-initializing .info-section {
+    opacity: 0.5;
+  }
+  
+  .mode-offline #offline-instructions {
+    display: block;
+  }
+  
+  .hidden {
+    display: none;
+  }
+  
+  /* Loading indicator */
+  .loading-indicator {
+    text-align: center;
+    padding: 2rem;
+    color: #777;
+  }
+  
+  .loading-indicator::after {
+    content: "...";
+    display: inline-block;
+    animation: ellipsis 1.5s infinite;
+  }
+  
+  @keyframes ellipsis {
+    0% { content: "."; }
+    33% { content: ".."; }
+    66% { content: "..."; }
+  }
+  
+  /* Install button */
+  .install-button {
+    background-color: white;
+    color: #e74c3c;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-left: 1rem;
+  }
+  
+  .install-button:hover {
+    background-color: #f5f5f5;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 600px) {
+    header h1 {
+      font-size: 1.2rem;
+    }
+    
+    #connection-status {
+      font-size: 0.8rem;
+    }
+  }
