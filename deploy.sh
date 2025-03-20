@@ -26,13 +26,13 @@ echo -e "${GREEN}Setting file permissions...${NC}"
 sudo find /var/www/emergency-pwa -type d -exec chmod 755 {} \;
 sudo find /var/www/emergency-pwa -type f -exec chmod 644 {} \;
 
-# Create Nginx configuration
-echo -e "${GREEN}Creating Nginx configuration...${NC}"
+# Create Nginx configuration for the application on port 8080
+echo -e "${GREEN}Creating Nginx configuration for the PWA on port 8080...${NC}"
 sudo tee /etc/nginx/sites-available/emergency-pwa << 'EOF'
 server {
     listen 8080;
     listen [::]:8080;
-    server_name emergency.jobmatchify.com;
+    server_name emergency.jobmatchify.com localhost;
     root /var/www/emergency-pwa;
     index index.html;
 
@@ -78,10 +78,33 @@ server {
 }
 EOF
 
-# Enable the site
-echo -e "${GREEN}Enabling the site...${NC}"
+# Create Nginx proxy configuration for port 80 to forward to the application on port 8080
+echo -e "${GREEN}Creating Nginx proxy configuration to forward from port 80 to port 8080...${NC}"
+sudo tee /etc/nginx/sites-available/emergency-proxy << 'EOF'
+server {
+    listen 80;
+    listen [::]:80;
+    server_name emergency.jobmatchify.com;
+
+    location / {
+        proxy_pass http://localhost:8080;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_cache_bypass $http_upgrade;
+        
+        # Pass headers for PWA functionality
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+}
+EOF
+
+# Enable the sites
+echo -e "${GREEN}Enabling the sites...${NC}"
 sudo ln -sf /etc/nginx/sites-available/emergency-pwa /etc/nginx/sites-enabled/
-sudo rm -f /etc/nginx/sites-enabled/default
+sudo ln -sf /etc/nginx/sites-available/emergency-proxy /etc/nginx/sites-enabled/
 
 # Test Nginx configuration
 echo -e "${GREEN}Testing Nginx configuration...${NC}"
@@ -92,8 +115,11 @@ echo -e "${GREEN}Restarting Nginx...${NC}"
 sudo systemctl restart nginx
 
 echo -e "\n${GREEN}Deployment completed!${NC}"
+echo -e "${BLUE}Now your application is:${NC}"
+echo "1. Running on port 8080 as configured in your original setup"
+echo "2. Accessible via emergency.jobmatchify.com (automatically forwarded from port 80 to 8080)"
+echo ""
 echo -e "${BLUE}Next steps:${NC}"
-echo "1. Replace \$emergency.jobmatchify.com in /etc/nginx/sites-available/emergency-pwa with your actual domain"
-echo "2. Run: sudo certbot --nginx -d emergency.jobmatchify.com"
-echo "3. Visit https://emergency.jobmatchify.com to test the PWA"
-echo "4. Test offline functionality and PWA installation"
+echo "1. Set up SSL for secure access with: sudo certbot --nginx -d emergency.jobmatchify.com"
+echo "2. Visit https://emergency.jobmatchify.com to test the PWA after SSL setup"
+echo "3. Test offline functionality and PWA installation"
