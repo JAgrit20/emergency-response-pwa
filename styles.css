@@ -235,21 +235,51 @@
     66% { content: "..."; }
   }
   
-  /* Install button */
+  /* Header styles */
+  .app-header {
+    background-color: #2196F3;
+    color: white;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  /* Install button styles */
   .install-button {
     background-color: white;
-    color: #e74c3c;
+    color: #2196F3;
     border: none;
-    padding: 0.4rem 0.8rem;
+    padding: 0.5rem 1rem;
     border-radius: 4px;
+    font-weight: 600;
     cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    margin-left: 1rem;
+    transition: background-color 0.2s, transform 0.1s;
   }
   
   .install-button:hover {
-    background-color: #f5f5f5;
+    background-color: #f0f0f0;
+    transform: translateY(-1px);
+  }
+  
+  .install-button:active {
+    transform: translateY(0);
+  }
+  
+  .install-button.hidden {
+    display: none;
   }
   
   /* Responsive design */

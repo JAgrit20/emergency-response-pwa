@@ -14,9 +14,14 @@
   <link rel="icon" type="image/x-icon" href="images/logo236.ico">
 </head>
 <body>
-  <header>
-    <h1>Emergency Response</h1>
-    <div id="connection-status" class="status-initializing">Initializing app...</div>
+  <header class="app-header">
+    <div class="header-content">
+      <h1>Emergency Response</h1>
+      <div class="header-controls">
+        <div id="connection-status" class="status-initializing">Initializing app...</div>
+        <button id="install-button" class="install-button hidden">Install App</button>
+      </div>
+    </div>
   </header>
   
   <main id="app-container" class="mode-initializing">
@@ -75,9 +80,8 @@
       const installPrompt = e;
       
       // Show the install button
-      const installButton = document.createElement('button');
-      installButton.textContent = 'Install App';
-      installButton.className = 'install-button';
+      const installButton = document.getElementById('install-button');
+      installButton.classList.remove('hidden');
       installButton.addEventListener('click', () => {
         // Show the install prompt
         installPrompt.prompt();
@@ -91,9 +95,6 @@
           }
         });
       });
-      
-      // Add button to header
-      document.querySelector('header').appendChild(installButton);
     });
   </script>
 </body>
