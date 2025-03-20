@@ -30,9 +30,9 @@ sudo find /var/www/emergency-pwa -type f -exec chmod 644 {} \;
 echo -e "${GREEN}Creating Nginx configuration...${NC}"
 sudo tee /etc/nginx/sites-available/emergency-pwa << 'EOF'
 server {
-    listen 80;
-    listen [::]:80;
-    server_name $YOUR_DOMAIN;
+    listen 8080;
+    listen [::]:8080;
+    server_name emergency.jobmatchify.com;
     root /var/www/emergency-pwa;
     index index.html;
 
