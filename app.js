@@ -576,10 +576,16 @@ function showPhoneNumberInput() {
 }
 
 // PWA installation handling
+// Ensure this is declared in the global scope 
 let deferredPrompt;
+console.log('deferredPrompt variable initialized');
+// const installButton = document.getElementById('install-button');
 const installButton = document.getElementById('install-button');
+// Add this logging
+console.log('Setting up beforeinstallprompt listener');
 
 window.addEventListener('beforeinstallprompt', (e) => {
+    console.log('beforeinstallprompt event fired');
     // Prevent Chrome 67 and earlier from automatically showing the prompt
     e.preventDefault();
     
@@ -587,12 +593,22 @@ window.addEventListener('beforeinstallprompt', (e) => {
     deferredPrompt = e;
     
     // Show the install button
-    installButton.classList.remove('hidden');
+    if (installButton) {
+        console.log('Showing install button');
+        installButton.classList.remove('hidden');
+    } else {
+        console.log('Install button not found');
+    }
 });
+console.log('Install button found:', installButton);
 
-installButton.addEventListener('click', async () => {
+if (installButton) {
+  console.log('Adding click listener to install button');
+  installButton.addEventListener('click', async () => {
+    console.log('Install button clicked');
     if (!deferredPrompt) {
-        return;
+      console.log('No deferred prompt available');
+      return;
     }
     
     // Show the install prompt
@@ -607,7 +623,8 @@ installButton.addEventListener('click', async () => {
     
     // Hide the install button
     installButton.classList.add('hidden');
-});
+  });
+}
 
 // Hide button if app is already installed
 window.addEventListener('appinstalled', () => {
