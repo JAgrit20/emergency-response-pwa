@@ -19,7 +19,7 @@
       <h1>Emergency Response</h1>
       <div class="header-controls">
         <div id="connection-status" class="status-initializing">Initializing app...</div>
-        <button id="install-button" class="install-button hidden">Install App</button>
+        <button id="install-button" class="install-button">Install App</button>
       </div>
     </div>
   </header>
@@ -74,28 +74,69 @@
     }
 
     // Check if the app is installed or can be installed
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault();
-      // Save the event to trigger later
-      const installPrompt = e;
+    // window.addEventListener('beforeinstallprompt', (e) => {
+    //   e.preventDefault();
+    //   // Save the event to trigger later
+    //   const installPrompt = e;
       
-      // Show the install button
-      const installButton = document.getElementById('install-button');
-      installButton.classList.remove('hidden');
-      installButton.addEventListener('click', () => {
-        // Show the install prompt
-        installPrompt.prompt();
+    //   // Show the install button
+    //   const installButton = document.getElementById('install-button');
+    //   installButton.classList.remove('hidden');
+    //   installButton.addEventListener('click', () => {
+    //     // Show the install prompt
+    //     installPrompt.prompt();
         
-        // Wait for the user to respond to the prompt
-        installPrompt.userChoice.then((choiceResult) => {
-          if (choiceResult.outcome === 'accepted') {
-            console.log('User accepted the install prompt');
-          } else {
-            console.log('User dismissed the install prompt');
-          }
-        });
-      });
-    });
+    //     // Wait for the user to respond to the prompt
+    //     installPrompt.userChoice.then((choiceResult) => {
+    //       if (choiceResult.outcome === 'accepted') {
+    //         console.log('User accepted the install prompt');
+    //       } else {
+    //         console.log('User dismissed the install prompt');
+    //       }
+    //     });
+    //   });
+    // });
+    let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  // Prevent the mini-infobar or the default install dialog from appearing automatically
+  e.preventDefault();
+  
+  // Save the event so it can be triggered later
+  deferredPrompt = e;
+  
+  // Show the "Install App" button
+  const installButton = document.getElementById('install-button');
+  installButton.classList.remove('hidden');
+});
+const installButton = document.getElementById('install-button');
+
+installButton.addEventListener('click', async () => {
+  if (!deferredPrompt) {
+    // If there's no deferredPrompt, exit
+    return;
+  }
+
+  // Show the install prompt
+  deferredPrompt.prompt();
+
+  // Wait for the user to respond to the prompt
+  const { outcome } = await deferredPrompt.userChoice;
+  console.log(`User response to the install prompt: ${outcome}`);
+
+  // Clear the deferredPrompt so it can't be used again
+  deferredPrompt = null;
+
+  // Hide the button
+  installButton.classList.add('hidden');
+});
+window.addEventListener('appinstalled', () => {
+  console.log('PWA was installed');
+  // Hide the button once installed
+  document.getElementById('install-button').classList.add('hidden');
+});
+
+
   </script>
 </body>
 </html>
