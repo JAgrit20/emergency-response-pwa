@@ -24,6 +24,27 @@ const CHECK_INTERVAL = 1500; // Check every 1.5 seconds
 async function initApp() {
   // Initialize UI as offline first
   updateUI('initializing');
+  document.addEventListener('DOMContentLoaded', () => {
+    const sendSmsBtn = document.getElementById('send-sms-location');
+    if (sendSmsBtn) {
+      console.log('Send SMS button found. Adding event listener.');
+      sendSmsBtn.addEventListener('click', async () => {
+        try {
+          const location = await getUserLocation();
+          const message = `I am here at latitude: ${location.latitude} and longitude: ${location.longitude}`;
+          console.log('Prepared message:', message);
+          const smsLink = `sms:?body=${encodeURIComponent(message)}`;
+          window.location.href = smsLink;
+        } catch (error) {
+          console.error('Could not get location:', error);
+          showErrorMessage('Failed to access location. Please check permissions.');
+        }
+      });
+    } else {
+      console.warn('Send SMS button not found in DOM.');
+    }
+  });
+  
   setOfflineMode(true);
 
   // Set up offline detection
@@ -39,6 +60,8 @@ async function initApp() {
   // Set up periodic connectivity checks
   setInterval(checkAndUpdateConnectivity, CHECK_INTERVAL);
 }
+
+
 
 // Function to check connectivity
 async function checkConnectivity() {
